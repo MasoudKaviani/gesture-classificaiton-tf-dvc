@@ -74,7 +74,12 @@ jobs:
           name: tfmodel
           path: models/
 
-      - name: Deploy model
-        run: |
-          echo "Deploying model..."
-          # Add deployment commands here, e.g., copying the model to a server or cloud storage
+      - name: Minio Deploy
+        uses: lovellfelix/minio-deploy-action@v1
+        with:
+          endpoint: ${{ secrets.MINIO_ENDPOINT }}
+          access_key: ${{ secrets.MINIO_ACCESS_KEY }}
+          secret_key: ${{ secrets.MINIO_SECRET_KEY }}
+          bucket: 'test'
+          source_dir: 'models'
+          target_dir: 'models'

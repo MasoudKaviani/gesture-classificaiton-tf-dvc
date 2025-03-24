@@ -23,6 +23,16 @@ jobs:
           python -m pip install pandas
           python -m pip install scikit-learn
           python -m pip install pytest
+          python -m pip install dvc
+          python -m pip install dvc_s3
+          python -m dvc remote add minio s3://datastorage
+          python -m dvc remote modify minio endpointurl ${{ secrets.MINIO_ENDPOINT }}
+          python -m dvc remote modify --local minio access_key_id ${{ secrets.MINIO_ACCESS_KEY }}
+          python -m dvc remote modify --local minio secret_access_key ${{ secrets.MINIO_SECRET_KEY }}
+
+      - name: DVC Pull
+        run: |
+          python -m dvc pull -r minio
 
       - name: Run tests
         run: |

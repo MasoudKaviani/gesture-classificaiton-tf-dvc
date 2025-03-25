@@ -54,6 +54,15 @@ jobs:
           python -m pip install pandas
           python -m pip install scikit-learn
           python -m pip install tensorflow
+          python -m pip install dvc
+          python -m pip install dvc_s3
+          python -m dvc remote modify minio endpointurl ${{ secrets.MINIO_ENDPOINT }}
+          python -m dvc remote modify --local minio access_key_id ${{ secrets.MINIO_ACCESS_KEY }}
+          python -m dvc remote modify --local minio secret_access_key ${{ secrets.MINIO_SECRET_KEY }}
+
+      - name: DVC Pull
+        run: |
+          python -m dvc pull -r minio
 
       - name: Train model
         run: |
@@ -89,6 +98,6 @@ jobs:
           endpoint: ${{ secrets.MINIO_ENDPOINT }}
           access_key: ${{ secrets.MINIO_ACCESS_KEY }}
           secret_key: ${{ secrets.MINIO_SECRET_KEY }}
-          bucket: 'test'
+          bucket: 'datastorage'
           source_dir: 'models'
           target_dir: 'models'

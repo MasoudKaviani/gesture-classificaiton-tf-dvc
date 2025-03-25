@@ -93,11 +93,16 @@ jobs:
           path: models/
 
       - name: Minio Deploy
-        uses: lovellfelix/minio-deploy-action@v1
-        with:
-          endpoint: ${{ secrets.MINIO_ENDPOINT }}
-          access_key: ${{ secrets.MINIO_ACCESS_KEY }}
-          secret_key: ${{ secrets.MINIO_SECRET_KEY }}
-          bucket: 'datastorage'
-          source_dir: 'models'
-          target_dir: 'models'
+        run: |
+          curl https://dl.min.io/client/mc/release/linux-arm64/mc --create-dirs -o ~/minio-binaries/mc
+          chmod +x $HOME/minio-binaries/mc
+          export PATH=$PATH:$HOME/minio-binaries/
+          mc alias set ALIAS ${{ secrets.MINIO_ENDPOINT }} ${{ secrets.MINIO_ACCESS_KEY }} ${{ secrets.MINIO_SECRET_KEY }}
+
+      - name: ls
+        run: |
+          ls models
+
+      - name: Upload model
+        run: |
+          mc put models/tfmodel.zip minio/datastorage

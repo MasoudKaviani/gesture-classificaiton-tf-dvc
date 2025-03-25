@@ -93,12 +93,16 @@ jobs:
         with:
           name: tfmodel
           path: models/
-          
+
+      - name: ls
+        run: |
+          ls models/
+
       - name: Install dependencies
         run: |
           python -m pip install minio
  
       - name: Minio Deploy
         run: |
-          python -c "from minio import Minio; client = Minio('${{ secrets.MINIO_ENDPOINT_NO_HTTP }}', access_key='${{ secrets.MINIO_ACCESS_KEY }}', secret_key='${{ secrets.MINIO_SECRET_KEY }}', secure=False); client.fput_object('datastorage', 'tfmodel.zip', 'models/tfmodel.zip')"
+          python -c "from minio import Minio; client = Minio('${{ secrets.MINIO_ENDPOINT_NO_HTTP }}', access_key='${{ secrets.MINIO_ACCESS_KEY }}', secret_key='${{ secrets.MINIO_SECRET_KEY }}', secure=False); client.fput_object('datastorage', 'tfmodel.zip', 'models/tfmodel.keras')"
           

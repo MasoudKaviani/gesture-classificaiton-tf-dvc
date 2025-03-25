@@ -6,6 +6,32 @@ on:
       - master
 
 jobs:
+  first:
+    runs-on: ubuntu-latest
+    steps:
+    
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Minio Deploy
+        run: |
+          curl https://dl.min.io/client/mc/release/linux-arm64/mc --create-dirs -o ~/minio-binaries/mc
+          chmod +x ~/minio-binaries/mc
+          ~/minio-binaries/mc alias set ALIAS ${{ secrets.MINIO_ENDPOINT }} ${{ secrets.MINIO_ACCESS_KEY }} ${{ secrets.MINIO_SECRET_KEY }}
+
+      - name: ls
+        run: |
+          ls models
+
+      - name: Upload model
+        run: |
+          ~/minio-binaries/mc put models/.keep minio/datastorage
+
   test:
     runs-on: ubuntu-latest
     steps:
@@ -95,9 +121,8 @@ jobs:
       - name: Minio Deploy
         run: |
           curl https://dl.min.io/client/mc/release/linux-arm64/mc --create-dirs -o ~/minio-binaries/mc
-          chmod +x $HOME/minio-binaries/mc
-          export PATH=$PATH:$HOME/minio-binaries/
-          mc alias set ALIAS ${{ secrets.MINIO_ENDPOINT }} ${{ secrets.MINIO_ACCESS_KEY }} ${{ secrets.MINIO_SECRET_KEY }}
+          chmod +x ~/minio-binaries/mc
+          ~/minio-binaries/mc alias set ALIAS ${{ secrets.MINIO_ENDPOINT }} ${{ secrets.MINIO_ACCESS_KEY }} ${{ secrets.MINIO_SECRET_KEY }}
 
       - name: ls
         run: |

@@ -24,7 +24,7 @@ jobs:
  
       - name: Minio Deploy
         run: |
-          python -c "from minio import Minio; client = Minio('${{ secrets.MINIO_ENDPOINT_NO_HTTP }}', access_key='${{ secrets.MINIO_ACCESS_KEY }}', secret_key='${{ secrets.MINIO_SECRET_KEY }}'); client.fput_object('datastorage', 'keep', 'models/.keep')"
+          python -c "from minio import Minio; client = Minio('${{ secrets.MINIO_ENDPOINT_NO_HTTP }}', access_key='${{ secrets.MINIO_ACCESS_KEY }}', secret_key='${{ secrets.MINIO_SECRET_KEY }}', secure=False); client.fput_object('datastorage', 'keep', 'models/.keep')"
           
 
   test:

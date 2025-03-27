@@ -67,7 +67,7 @@ jobs:
 
       - name: Train model
         run: |
-          python src/app.py
+          python -m dvc repro
 
       - name: Save model artifact
         uses: actions/upload-artifact@v4

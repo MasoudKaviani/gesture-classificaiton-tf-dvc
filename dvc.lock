@@ -1,0 +1,86 @@
+schema: '2.0'
+stages:
+  split:
+    cmd: python src/split.py
+    deps:
+    - path: data/cleaned_dataset.csv
+      hash: md5
+      md5: 4a112f20bb9342a46ddd70b15a33d1b7
+      size: 14646
+    - path: src/split.py
+      hash: md5
+      md5: 08f9425c6e32d1d777a62670c0ad0d9f
+      size: 551
+    outs:
+    - path: temp_data/X_test.csv
+      hash: md5
+      md5: c86bd2888326013ab5bf650d1ea218a4
+      size: 2168
+    - path: temp_data/X_train.csv
+      hash: md5
+      md5: 50be24afb6cdfc3c0d17fbb7a99a53cc
+      size: 12115
+    - path: temp_data/y_test.csv
+      hash: md5
+      md5: 0f4798ad0d6bcf2f61785fa68471912c
+      size: 99
+    - path: temp_data/y_train.csv
+      hash: md5
+      md5: 84846d8a75b98671ea708a923006d30d
+      size: 513
+  preprocessing:
+    cmd: python src/preprocess.py
+    deps:
+    - path: src/preprocess.py
+      hash: md5
+      md5: 153a78576a7a5408faa8cc5b380a2189
+      size: 424
+    - path: temp_data/X_test.csv
+      hash: md5
+      md5: c86bd2888326013ab5bf650d1ea218a4
+      size: 2168
+    - path: temp_data/X_train.csv
+      hash: md5
+      md5: 50be24afb6cdfc3c0d17fbb7a99a53cc
+      size: 12115
+    outs:
+    - path: temp_data/X_test_pre.csv
+      hash: md5
+      md5: b3e09ebc915bd8c48276c4ee29318294
+      size: 4611
+    - path: temp_data/X_train_pre.csv
+      hash: md5
+      md5: d6c8d859a99bc4f6e64904530480155c
+      size: 25838
+  train:
+    cmd: python src/train.py
+    deps:
+    - path: src/train.py
+      hash: md5
+      md5: 114fae75a25191a33a7cef5da99541d2
+      size: 1610
+    - path: temp_data/X_test_pre.csv
+      hash: md5
+      md5: b3e09ebc915bd8c48276c4ee29318294
+      size: 4611
+    - path: temp_data/X_train_pre.csv
+      hash: md5
+      md5: d6c8d859a99bc4f6e64904530480155c
+      size: 25838
+    - path: temp_data/y_test.csv
+      hash: md5
+      md5: 0f4798ad0d6bcf2f61785fa68471912c
+      size: 99
+    - path: temp_data/y_train.csv
+      hash: md5
+      md5: 84846d8a75b98671ea708a923006d30d
+      size: 513
+    outs:
+    - path: models/tfmodel.keras
+      hash: md5
+      md5: 03f30487dca47fce4f3b8de37c03c570
+      size: 587665
+    - path: temp_data/metrics.json
+      hash: md5
+      md5: de1eb130920282c03f19bbf71d508dc5
+      size: 83
